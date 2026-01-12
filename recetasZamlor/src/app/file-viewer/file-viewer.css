@@ -1,0 +1,35 @@
+.title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin: 1rem 0;
+}
+
+.subtitle {
+  font-size: 1.5rem;
+  margin-top: 2rem;
+  color: #ff3366;
+}
+
+ul {
+  list-style: disc;
+  margin-left: 2rem;
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+}
+
+li {
+  margin-bottom: 0.5rem;
+  font-size: 1rem;
+}
+
+@media screen and (max-width: 600px) {
+  .title {
+    font-size: 2rem;
+  }
+  .subtitle {
+    font-size: 1.2rem;
+  }
+  li {
+    font-size: 0.95rem;
+  }
+}

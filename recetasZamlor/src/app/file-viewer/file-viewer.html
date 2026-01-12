@@ -1,0 +1,10 @@
+<a routerLink="/">⬅ Volver</a>
+
+<h1 class="title">{{ title() }}</h1>
+
+<section *ngFor="let section of sections()">
+  <h2 class="subtitle">{{ section.subtitle }}</h2>
+  <ul *ngIf="section.lines.length > 0">
+    <li *ngFor="let line of section.lines">{{ line }}</li>
+  </ul>
+</section>
