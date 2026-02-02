@@ -1,6 +1,6 @@
 // Configuración del repositorio
 const owner = "andreslopezzamarreno";
-const repo = "Recetas";
+const repo = "";
 const branch = "main";
 
 const grid = document.getElementById("grid");
