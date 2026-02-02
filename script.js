@@ -23,6 +23,12 @@ function loadFolder(path = "") {
   grid.innerHTML = "";
   status.textContent = path ? `Carpeta: ${path}` : "Raíz";
 
+  // Actualizar el historial del navegador
+  const url = path ? `#${path}` : "#";
+  if (window.location.hash !== url) {
+    window.history.pushState({ path }, "", url);
+  }
+
   fetch(apiUrl)
     .then(res => {
       if (!res.ok) throw new Error("GitHub no respondió bien");
@@ -33,6 +39,14 @@ function loadFolder(path = "") {
         status.textContent = "Carpeta vacía";
         return;
       }
+
+      items = items.filter(item => item.name.toLowerCase() !== "readme.md"); // Excluir README
+
+      // Ordenar carpetas primero
+      items.sort((a, b) => {
+        if (a.type === b.type) return a.name.localeCompare(b.name); // Orden alfabético
+        return a.type === "dir" ? -1 : 1; // Carpetas primero
+      });
 
       items.forEach(item => {
         const card = document.createElement("div");
@@ -57,6 +71,32 @@ function loadFolder(path = "") {
             loadFolder(item.path);
             backBtn.disabled = false;
           };
+        } else if (item.type === "file") {
+          card.style.cursor = "pointer";
+          card.onclick = () => {
+            const fileUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${item.path}`;
+            fetch(fileUrl)
+              .then(res => {
+                if (!res.ok) throw new Error("No se pudo cargar el archivo");
+                return res.text();
+              })
+              .then(content => {
+                pathStack.push(path); // Guardar la ruta actual antes de mostrar el archivo
+                backBtn.disabled = false; // Habilitar el botón 'Atrás'
+
+                grid.innerHTML = ""; // Limpiar la cuadrícula
+                const fileContent = document.createElement("pre");
+                fileContent.textContent = content;
+                fileContent.style.whiteSpace = "pre-wrap"; // Ajustar texto
+                fileContent.style.wordWrap = "break-word"; // Evitar desbordamiento
+                grid.appendChild(fileContent);
+                status.textContent = `Archivo: ${item.name}`;
+              })
+              .catch(err => {
+                status.textContent = "Error mostrando el archivo 😵";
+                console.error(err);
+              });
+          };
         }
       });
     })
@@ -66,6 +106,19 @@ function loadFolder(path = "") {
     });
 }
 
+// Manejar el botón 'Atrás' del navegador
+window.onpopstate = (event) => {
+  if (event.state && event.state.path !== undefined) {
+    loadFolder(event.state.path);
+  } else {
+    loadFolder(); // Cargar la raíz si no hay estado
+  }
+};
+
+// Cargar la carpeta inicial basada en el hash de la URL
+const initialPath = window.location.hash ? window.location.hash.substring(1) : "";
+loadFolder(initialPath);
+
 // Botón "Atrás"
 backBtn.onclick = () => {
   if (pathStack.length === 0) return;
@@ -73,6 +126,3 @@ backBtn.onclick = () => {
   loadFolder(prevPath);
   if (pathStack.length === 0) backBtn.disabled = true;
 };
-
-// Cargar raíz al inicio
-loadFolder();
