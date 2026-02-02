@@ -41,10 +41,10 @@ h1 {
 }
 
 .controls {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: 1fr 1fr; /* Dos columnas iguales */
+  gap: 1rem;
+  justify-items: center; /* Centrar botones en sus columnas */
   margin-bottom: 1rem;
 }
 
@@ -74,87 +74,17 @@ button:hover:not(:disabled) {
   margin-top: 0.5rem;
 }
 
-/* Diseño base para la cuadrícula */
 .grid {
   display: grid;
-  grid-template-columns: repeat(6, 1fr); /* 6 columnas por defecto para pantallas grandes */
+  grid-template-columns: repeat(2, 1fr); 
   gap: 1rem;
 }
 
-/* Tablets (entre 768px y 1024px) */
-@media (max-width: 1024px) {
-  h1 {
-    font-size: 2.2rem;
-  }
-
-  .grid {
-    grid-template-columns: repeat(4, 1fr); /* 4 columnas para tablets */
-  }
-
-  .card {
-    padding: 1.2rem;
-  }
-
-  .icon {
-    font-size: 2.2rem;
-  }
-
-  .filename {
-    font-size: 1.1rem;
-  }
-}
-
-/* Móviles (menos de 768px) */
-@media (max-width: 768px) {
-  h1 {
-    font-size: 2rem;
-  }
-
-  .grid {
-    grid-template-columns: repeat(2, 1fr); /* 2 columnas para móviles */
-  }
-
-  .card {
-    padding: 1rem;
-  }
-
-  .icon {
-    font-size: 2rem;
-  }
-
-  .filename {
-    font-size: 1rem;
-  }
-
-  button {
-    width: 100%;
-    margin-bottom: 0.5rem;
-  }
-
-  .controls {
-    flex-direction: column;
-    align-items: stretch;
-  }
-}
-
-@media (max-width: 480px) {
-  h1 {
-    font-size: 1.8rem;
-  }
-
-  .grid {
-    grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-  }
-
-  .card {
-    padding: 0.8rem;
-  }
-
-  .icon {
-    font-size: 1.8rem;
-  }
-
-  .filename {
-    font-size: 0.9rem;
-  }
+/* Centrar contenido en las columnas */
+.card {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
 }

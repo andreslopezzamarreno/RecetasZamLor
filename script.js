@@ -21,7 +21,7 @@ function beautifyName(filename) {
 function loadFolder(path = "") {
   const apiUrl = `https://api.github.com/repos/${owner}/${repo}/contents/${path}?ref=${branch}`;
   grid.innerHTML = "";
-  status.textContent = path ? `Carpeta: ${path}` : "Raíz";
+  status.textContent = ""; // Eliminar el texto del estado
 
   // Actualizar el historial del navegador
   const url = path ? `#${path}` : "#";
@@ -96,7 +96,7 @@ function loadFolder(path = "") {
                 fileContent.style.whiteSpace = "pre-wrap"; // Ajustar texto
                 fileContent.style.wordWrap = "break-word"; // Evitar desbordamiento
                 grid.appendChild(fileContent);
-                status.textContent = `Archivo: ${item.name}`;
+                status.textContent = ""; // Eliminar el texto del estado
               })
               .catch(err => {
                 status.textContent = "Error mostrando el archivo 😵";
@@ -134,7 +134,7 @@ window.onpopstate = (event) => {
             fileContent.style.whiteSpace = "pre-wrap"; // Ajustar texto
             fileContent.style.wordWrap = "break-word"; // Evitar desbordamiento
             grid.appendChild(fileContent);
-            status.textContent = `Archivo: ${filePath.split("/").pop()}`;
+            status.textContent = ""; // Eliminar el texto del estado
           })
           .catch(err => {
             status.textContent = "Error mostrando el archivo 😵";
@@ -160,4 +160,12 @@ backBtn.onclick = () => {
   const prevPath = pathStack.pop();
   loadFolder(prevPath);
   if (pathStack.length === 0) backBtn.disabled = true;
+};
+
+// Botón "Inicio"
+const homeBtn = document.getElementById("homeBtn");
+homeBtn.onclick = () => {
+  pathStack = []; // Vaciar la pila de rutas
+  loadFolder(); // Cargar la raíz
+  backBtn.disabled = true; // Deshabilitar el botón "Atrás"
 };
