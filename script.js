@@ -84,6 +84,12 @@ function loadFolder(path = "") {
                 pathStack.push(path); // Guardar la ruta actual antes de mostrar el archivo
                 backBtn.disabled = false; // Habilitar el botón 'Atrás'
 
+                // Actualizar el historial del navegador para el archivo
+                const fileUrl = `#${item.path}`;
+                if (window.location.hash !== fileUrl) {
+                  window.history.pushState({ path, file: item.path }, "", fileUrl);
+                }
+
                 grid.innerHTML = ""; // Limpiar la cuadrícula
                 const fileContent = document.createElement("pre");
                 fileContent.textContent = content;
@@ -108,8 +114,37 @@ function loadFolder(path = "") {
 
 // Manejar el botón 'Atrás' del navegador
 window.onpopstate = (event) => {
-  if (event.state && event.state.path !== undefined) {
-    loadFolder(event.state.path);
+  if (event.state) {
+    if (event.state.file) {
+      // Si es un archivo, cargar la carpeta y luego el archivo
+      const filePath = event.state.file;
+      const folderPath = event.state.path;
+      loadFolder(folderPath);
+      setTimeout(() => {
+        const fileUrl = `https://raw.githubusercontent.com/${owner}/${repo}/${branch}/${filePath}`;
+        fetch(fileUrl)
+          .then(res => {
+            if (!res.ok) throw new Error("No se pudo cargar el archivo");
+            return res.text();
+          })
+          .then(content => {
+            grid.innerHTML = ""; // Limpiar la cuadrícula
+            const fileContent = document.createElement("pre");
+            fileContent.textContent = content;
+            fileContent.style.whiteSpace = "pre-wrap"; // Ajustar texto
+            fileContent.style.wordWrap = "break-word"; // Evitar desbordamiento
+            grid.appendChild(fileContent);
+            status.textContent = `Archivo: ${filePath.split("/").pop()}`;
+          })
+          .catch(err => {
+            status.textContent = "Error mostrando el archivo 😵";
+            console.error(err);
+          });
+      }, 100);
+    } else {
+      // Si es una carpeta, cargar la carpeta
+      loadFolder(event.state.path);
+    }
   } else {
     loadFolder(); // Cargar la raíz si no hay estado
   }

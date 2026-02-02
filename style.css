@@ -76,44 +76,17 @@ button:hover:not(:disabled) {
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  grid-template-columns: repeat(6, 1fr); /* 6 columnas por defecto para ordenadores */
   gap: 1rem;
 }
 
-.card {
-  background: rgba(255,255,255,0.08);
-  border-radius: 14px;
-  padding: 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-  transition: transform 0.2s ease, background 0.2s ease;
-  cursor: default;
-}
-
-.card:hover {
-  transform: translateY(-5px) scale(1.02);
-  background: rgba(255,255,255,0.15);
-}
-
-.icon {
-  font-size: 2rem; /* más grande para móviles */
-  flex-shrink: 0;
-}
-
-.filename {
-  word-break: break-word;
-  font-size: 1.1rem; /* más legible */
-}
-
-/* MEDIA QUERIES PARA MÓVILES Y TABLETS */
 @media (max-width: 1024px) {
   h1 {
     font-size: 2.2rem;
   }
 
   .grid {
-    grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+    grid-template-columns: repeat(4, 1fr); /* 4 columnas para tablets */
   }
 
   .card {
@@ -135,7 +108,7 @@ button:hover:not(:disabled) {
   }
 
   .grid {
-    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+    grid-template-columns: repeat(2, 1fr); /* 2 columnas para móviles */
   }
 
   .card {
