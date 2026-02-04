@@ -1,7 +1,7 @@
 import os
 import json
 
-BASE_DIR = "../recetas"
+BASE_DIR = "recetas"
 
 
 def generar_index(ruta):
