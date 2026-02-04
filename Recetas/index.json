@@ -1,5 +1,15 @@
 [
   {
+    "name": "Butter chicken.md",
+    "type": "file",
+    "path": "recetas/Butter chicken.md"
+  },
+  {
+    "name": "Carne_guisada.md",
+    "type": "file",
+    "path": "recetas/Carne_guisada.md"
+  },
+  {
     "name": "Cocido.md",
     "type": "file",
     "path": "recetas/Cocido.md"
@@ -8,6 +18,11 @@
     "name": "Cookies.md",
     "type": "file",
     "path": "recetas/Cookies.md"
+  },
+  {
+    "name": "Pizza",
+    "type": "dir",
+    "path": "recetas/Pizza"
   },
   {
     "name": "Pollo_Guisado.md",
