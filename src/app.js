@@ -12,7 +12,7 @@
       .trim();
   }
 
-  async function loadFolder(path = "../recetas") {
+  async function loadFolder(path = "./recetas") {
     try {
       const indexPath = `${path}/index.json`;
 
