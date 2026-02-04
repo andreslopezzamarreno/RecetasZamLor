@@ -4,14 +4,13 @@ const backBtn = document.getElementById("backBtn");
 const homeBtn = document.getElementById("homeBtn");
 
 const BASE = "./Recetas";
-let pathStack = []; // Guardará objetos { type: "folder"|"file", path: "ruta" }
 
 // Función para limpiar nombres de archivo
 function beautifyName(filename) {
   return filename.replace(/\.[^/.]+$/, "").replace(/[-_]+/g, " ").trim();
 }
 
-// Función principal para cargar carpetas
+// Función para cargar carpetas
 async function loadFolder(path = "") {
   try {
     const indexPath = `${BASE}/${path ? path + "/" : ""}index.json`;
@@ -25,6 +24,12 @@ async function loadFolder(path = "") {
     if (!items.length) {
       status.textContent = "Carpeta vacía";
       return;
+    }
+
+    // Actualizamos la URL y el historial
+    const url = path ? `#${path}` : "#";
+    if (window.location.hash !== url) {
+      window.history.pushState({ path }, "", url);
     }
 
     items
@@ -49,28 +54,26 @@ async function loadFolder(path = "") {
         grid.appendChild(card);
 
         if (item.type === "dir") {
-          card.onclick = () => {
-            pathStack.push({ type: "folder", path }); // Guardamos la carpeta actual
-            backBtn.disabled = false;
-            loadFolder(path ? `${path}/${item.name}` : item.name);
-          };
+          card.onclick = () => loadFolder(path ? `${path}/${item.name}` : item.name);
         } else if (item.type === "file") {
           card.onclick = async () => {
             try {
               const filePath = `${BASE}/${path ? path + "/" : ""}${item.name}`;
               const res = await fetch(filePath);
-              if (!res.ok) throw new Error("No se pudo cargar archivo");
+              if (!res.ok) throw new Error();
 
               const content = await res.text();
-
-              // Guardamos la carpeta actual para poder volver al contenedor
-              pathStack.push({ type: "folder", path });
-
-              backBtn.disabled = false;
               grid.innerHTML = "";
+
               const pre = document.createElement("pre");
               pre.textContent = content;
               grid.appendChild(pre);
+
+              // Guardamos archivo en historial
+              const fileUrl = `#${path ? path + "/" : ""}${item.name}`;
+              if (window.location.hash !== fileUrl) {
+                window.history.pushState({ path, file: item.name }, "", fileUrl);
+              }
             } catch {
               status.textContent = "Error mostrando archivo 😵";
             }
@@ -83,22 +86,43 @@ async function loadFolder(path = "") {
   }
 }
 
-// Botón Atrás
-backBtn.onclick = () => {
-  if (!pathStack.length) return;
-  const last = pathStack.pop();
-  if (last.type === "folder") {
-    loadFolder(last.path);
-  }
-  if (!pathStack.length) backBtn.disabled = true;
-};
-
 // Botón Inicio
-homeBtn.onclick = () => {
-  pathStack = [];
-  backBtn.disabled = true;
-  loadFolder();
+homeBtn.onclick = () => loadFolder("");
+
+// Manejar botón atrás del navegador o móvil
+window.onpopstate = (event) => {
+  if (event.state) {
+    if (event.state.file) {
+      // Es un archivo
+      const folderPath = event.state.path;
+      const fileName = event.state.file;
+
+      loadFolder(folderPath).then(() => {
+        const filePath = `${BASE}/${folderPath ? folderPath + "/" : ""}${fileName}`;
+        fetch(filePath)
+          .then(res => res.text())
+          .then(content => {
+            grid.innerHTML = "";
+            const pre = document.createElement("pre");
+            pre.textContent = content;
+            grid.appendChild(pre);
+          });
+      });
+    } else {
+      // Es una carpeta
+      loadFolder(event.state.path);
+    }
+  } else {
+    // Sin estado (por ejemplo primer pushState) -> raíz
+    loadFolder("");
+  }
 };
 
-// Cargar carpeta inicial
-loadFolder();
+// Registramos el estado inicial para la raíz al cargar la página
+if (!window.location.hash) {
+  window.history.replaceState({ path: "" }, "", "#");
+}
+
+// Cargar carpeta inicial según hash
+const initialPath = window.location.hash ? window.location.hash.substring(1) : "";
+loadFolder(initialPath);
