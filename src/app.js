@@ -3,20 +3,15 @@ const status = document.getElementById("status");
 const backBtn = document.getElementById("backBtn");
 const homeBtn = document.getElementById("homeBtn");
 
-// Carpeta base de las recetas (en la raíz del repo)
 const BASE = "./Recetas";
-
-let pathStack = [];
+let pathStack = []; // Guardará objetos { type: "folder"|"file", path: "ruta" }
 
 // Función para limpiar nombres de archivo
 function beautifyName(filename) {
-  return filename
-    .replace(/\.[^/.]+$/, "")
-    .replace(/[-_]+/g, " ")
-    .trim();
+  return filename.replace(/\.[^/.]+$/, "").replace(/[-_]+/g, " ").trim();
 }
 
-// Carga una carpeta
+// Función principal para cargar carpetas
 async function loadFolder(path = "") {
   try {
     const indexPath = `${BASE}/${path ? path + "/" : ""}index.json`;
@@ -24,7 +19,6 @@ async function loadFolder(path = "") {
     if (!res.ok) throw new Error("No se pudo cargar index.json");
 
     const items = await res.json();
-
     grid.innerHTML = "";
     status.textContent = "";
 
@@ -56,7 +50,7 @@ async function loadFolder(path = "") {
 
         if (item.type === "dir") {
           card.onclick = () => {
-            pathStack.push(path);
+            pathStack.push({ type: "folder", path }); // Guardamos la carpeta actual
             backBtn.disabled = false;
             loadFolder(path ? `${path}/${item.name}` : item.name);
           };
@@ -69,9 +63,10 @@ async function loadFolder(path = "") {
 
               const content = await res.text();
 
-              pathStack.push(path);
-              backBtn.disabled = false;
+              // Guardamos la carpeta actual para poder volver al contenedor
+              pathStack.push({ type: "folder", path });
 
+              backBtn.disabled = false;
               grid.innerHTML = "";
               const pre = document.createElement("pre");
               pre.textContent = content;
@@ -86,13 +81,15 @@ async function loadFolder(path = "") {
     console.error(err);
     status.textContent = "Error cargando carpeta 😵";
   }
-};
+}
 
 // Botón Atrás
 backBtn.onclick = () => {
   if (!pathStack.length) return;
-  const prev = pathStack.pop();
-  loadFolder(prev);
+  const last = pathStack.pop();
+  if (last.type === "folder") {
+    loadFolder(last.path);
+  }
   if (!pathStack.length) backBtn.disabled = true;
 };
 
