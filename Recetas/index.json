@@ -1,0 +1,22 @@
+[
+  {
+    "name": "Cocido.md",
+    "type": "file",
+    "path": "../recetas/Cocido.md"
+  },
+  {
+    "name": "Cookies.md",
+    "type": "file",
+    "path": "../recetas/Cookies.md"
+  },
+  {
+    "name": "Pollo_Guisado.md",
+    "type": "file",
+    "path": "../recetas/Pollo_Guisado.md"
+  },
+  {
+    "name": "Sopa_de_ajo.md",
+    "type": "file",
+    "path": "../recetas/Sopa_de_ajo.md"
+  }
+]

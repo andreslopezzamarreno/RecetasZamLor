@@ -1,23 +1,23 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Recetas</title>
-  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="src/styles.css" />
 </head>
 <body>
-  <div class="container">
-    <h1>📖 RECETAS</h1>
+  <header class="topbar">
+    <button id="homeBtn">Inicio</button>
+    <button id="backBtn" disabled>Atrás</button>
+    <h1>Recetas</h1>
+  </header>
 
-    <div class="controls">
-      <button id="backBtn" disabled>⬅ Atrás</button>
-      <button id="homeBtn">🏠 Inicio</button> <!-- Botón para ir al inicio -->
-      <span id="status" class="status">Cargando...</span>
-    </div>
-
+  <main>
+    <div id="status"></div>
     <div id="grid" class="grid"></div>
-  </div>
+  </main>
 
-  <script src="script.js"></script>
+  <script src="src/app.js"></script>
 </body>
 </html>
