@@ -109,3 +109,52 @@ main {
 .hidden {
   display: none;
 }
+
+/* Vista de receta */
+#recipeView {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  margin: 0 auto;
+  max-width: 800px; /* Ancho máximo para recetas */
+  background-color: #fff7f0;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  width: 75%; /* Siempre ocupa el 75% del ancho de la pantalla */
+  margin: 0 auto; /* Centrado horizontal */
+}
+
+#recipeView h2 {
+  font-size: 1.5rem;
+  color: #ff6b35;
+  margin-bottom: 16px;
+}
+
+#recipeView p {
+  font-size: 1rem;
+  line-height: 1.6;
+  color: #333;
+  text-align: justify;
+  margin-bottom: 12px;
+}
+
+#recipeView ul {
+  list-style: disc;
+  padding-left: 20px;
+  margin-bottom: 12px;
+}
+
+#recipeView li {
+  margin-bottom: 8px;
+}
+
+/* Asegurar que grid y recipeView no se vean al mismo tiempo */
+#grid.hidden {
+  display: none;
+}
+
+#recipeView.hidden {
+  display: none;
+}

@@ -162,7 +162,13 @@ function showRecipe(content, path, fileName) {
   grid.classList.add("hidden");
   recipeView.classList.remove("hidden");
 
-  recipeView.innerHTML = renderMarkdown(content);
+  if (!content.trim()) {
+    recipeView.classList.add("empty");
+    recipeView.innerHTML = ""; // Aseguramos que no haya contenido previo
+  } else {
+    recipeView.classList.remove("empty");
+    recipeView.innerHTML = renderMarkdown(content);
+  }
 
   const firstLine = content.split("\n").find(line => line.startsWith("# "));
   if (firstLine) headerTitle.textContent = firstLine.replace("# ", "");
