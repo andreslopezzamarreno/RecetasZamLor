@@ -1,8 +1,8 @@
 const grid = document.getElementById("grid");
 const status = document.getElementById("status");
-const backBtn = document.getElementById("backBtn");
 const homeBtn = document.getElementById("homeBtn");
 const headerTitle = document.querySelector("header h1"); // <- nuestro h1
+const recipeView = document.getElementById("recipeView");
 const DEFAULT_TITLE = headerTitle.textContent; // Guardamos el título original
 
 const BASE = "./Recetas";
@@ -44,6 +44,9 @@ function renderMarkdown(mdText) {
 // -------------------
 async function loadFolder(path = "") {
   try {
+    grid.classList.remove("hidden");
+    recipeView.classList.add("hidden");
+    recipeView.innerHTML = "";  
     const indexPath = `${BASE}/${path ? path + "/" : ""}index.json`;
     const res = await fetch(indexPath);
     if (!res.ok) throw new Error("No se pudo cargar index.json");
@@ -98,15 +101,7 @@ async function loadFolder(path = "") {
               if (!res.ok) throw new Error("No se pudo cargar archivo");
 
               const content = await res.text();
-              grid.innerHTML = "";
-              grid.classList.add("recipe-view"); // ← activar centrado vertical
-
-              const recipeDiv = document.createElement("div");
-              recipeDiv.className = "recipe-content";
-              recipeDiv.innerHTML = renderMarkdown(content);
-              grid.appendChild(recipeDiv);
-
-
+              showRecipe(content, path, item.name);
               // Cambiar título del header al título de la receta
               const firstLine = content.split("\n").find(line => line.startsWith("# "));
               if (firstLine) headerTitle.textContent = firstLine.replace("# ", "");
@@ -142,21 +137,12 @@ window.onpopstate = (event) => {
       const folderPath = event.state.path;
       const fileName = event.state.file;
 
-      loadFolder(folderPath).then(() => {
-        const filePath = `${BASE}/${folderPath ? folderPath + "/" : ""}${fileName}`;
-        fetch(filePath)
-          .then(res => res.text())
-          .then(content => {
-            grid.innerHTML = "";
-            const recipeDiv = document.createElement("div");
-            recipeDiv.className = "recipe-content";
-            recipeDiv.innerHTML = renderMarkdown(content);
-            grid.appendChild(recipeDiv);
-
-            const firstLine = content.split("\n").find(line => line.startsWith("# "));
-            if (firstLine) headerTitle.textContent = firstLine.replace("# ", "");
-          });
-      });
+      const filePath = `${BASE}/${folderPath ? folderPath + "/" : ""}${fileName}`;
+      fetch(filePath)
+        .then(res => res.text())
+        .then(content => {
+          showRecipe(content, folderPath, fileName);
+        });
     } else {
       loadFolder(event.state.path);
     }
@@ -172,6 +158,20 @@ if (!window.location.hash) {
   window.history.replaceState({ path: "" }, "", "#");
 }
 
+function showRecipe(content, path, fileName) {
+  grid.classList.add("hidden");
+  recipeView.classList.remove("hidden");
+
+  recipeView.innerHTML = renderMarkdown(content);
+
+  const firstLine = content.split("\n").find(line => line.startsWith("# "));
+  if (firstLine) headerTitle.textContent = firstLine.replace("# ", "");
+
+  const fileUrl = `#${path ? path + "/" : ""}${fileName}`;
+  if (window.location.hash !== fileUrl) {
+    window.history.pushState({ path, file: fileName }, "", fileUrl);
+  }
+}
 // -------------------
 // Cargar carpeta inicial según hash
 // -------------------

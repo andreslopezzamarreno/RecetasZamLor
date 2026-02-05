@@ -82,8 +82,6 @@ main {
   max-width: 900px;   /* ← límite visual bonito */
   margin: 0 auto;     /* ← CENTRADO REAL */
 }
-
-
 /* Tarjetas */
 .card {
   background-color: #fff7f0;
@@ -101,10 +99,6 @@ main {
   box-shadow: 0 8px 18px rgba(0,0,0,0.15);
 }
 
-.icon {
-  font-size: 2.2rem;
-}
-
 .filename {
   margin-top: 8px;
   font-size: 0.95rem;
@@ -112,36 +106,6 @@ main {
   word-wrap: break-word;
 }
 
-/* Recetas Markdown */
-.recipe-content {
-  width: 100%;
-  max-width: 800px;
-  margin: 24px auto; /* Centramos horizontal */
-  background-color: #fff7f0;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-  line-height: 1.6;
-  font-size: 1rem;
-}
-
-.recipe-content h2.recipe-subtitle {
-  font-size: 1.3rem;
-  color: #ff6b35;
-  text-align: center; /* subtítulos centrados */
-  margin-top: 16px;
-  margin-bottom: 8px;
-}
-
-.recipe-content ul {
-  padding-left: 20px;
-  margin-bottom: 16px;
-}
-
-.recipe-content li {
-  margin-bottom: 4px;
-}
-
-.recipe-content p {
-  margin-bottom: 8px;
+.hidden {
+  display: none;
 }
