@@ -60,9 +60,10 @@ main {
   flex: 1;
   display: flex;
   flex-direction: column;
-  align-items: center;
   padding: 16px;
   width: 100%;
+  min-height: calc(100vh - 80px); /* Altura mínima menos header */
+  box-sizing: border-box;
 }
 
 /* Estado */
@@ -72,15 +73,16 @@ main {
   text-align: center;
 }
 
-/* Grid: SIEMPRE 2 columnas que ocupan todo el ancho */
+/* Grid: Siempre 2 columnas que ocupan todo el ancho */
 .grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr); /* Siempre 2 columnas, igual ancho */
-  gap: 2%; /* Espacio entre columnas/fila como % */
+  grid-template-columns: repeat(2, 1fr);
+  gap: 16px;
   width: 100%;
-  max-width: 100%; /* Ocupa todo el ancho */
-  margin: 0 auto;
+  max-width: 900px;   /* ← límite visual bonito */
+  margin: 0 auto;     /* ← CENTRADO REAL */
 }
+
 
 /* Tarjetas */
 .card {
@@ -110,17 +112,36 @@ main {
   word-wrap: break-word;
 }
 
-/* Archivos de texto */
-pre {
-  background-color: #fff7f0;
-  padding: 16px;
-  border-radius: 12px;
+/* Recetas Markdown */
+.recipe-content {
   width: 100%;
   max-width: 800px;
-  white-space: pre-wrap;
-  word-wrap: break-word;
-  overflow-x: auto;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+  margin: 24px auto; /* Centramos horizontal */
+  background-color: #fff7f0;
+  padding: 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  line-height: 1.6;
+  font-size: 1rem;
+}
+
+.recipe-content h2.recipe-subtitle {
+  font-size: 1.3rem;
+  color: #ff6b35;
+  text-align: center; /* subtítulos centrados */
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.recipe-content ul {
+  padding-left: 20px;
   margin-bottom: 16px;
 }
 
+.recipe-content li {
+  margin-bottom: 4px;
+}
+
+.recipe-content p {
+  margin-bottom: 8px;
+}
